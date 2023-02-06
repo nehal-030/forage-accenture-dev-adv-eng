@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -47,12 +44,8 @@ public class ReportController {
         List<Number> matchingIds = new ArrayList<>();
         searchService.search("cool").forEach((item) -> matchingIds.add(item.getId()));
 
-        List<Number> counted = new ArrayList<>();
-        for (Number id: matchingIds) {
-            if (!counted.contains(id)) {
-                counted.add(id);
-            }
-        }
+        HashSet<Number> counted = new HashSet<Number>();
+        counted.addAll(matchingIds);
 
         response.getSearchTermHits().put("Cool", counted.size());
 

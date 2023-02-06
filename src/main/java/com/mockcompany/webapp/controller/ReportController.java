@@ -45,18 +45,8 @@ public class ReportController {
         int count = searchService.search("").size();
 
         List<Number> matchingIds = new ArrayList<>();
-        matchingIds.addAll(
-                this.entityManager.createQuery("SELECT item.id from ProductItem item where item.name like '%cool%'").getResultList()
-        );
-        matchingIds.addAll(
-                this.entityManager.createQuery("SELECT item.id from ProductItem item where item.description like '%cool%'").getResultList()
-        );
-        matchingIds.addAll(
-                this.entityManager.createQuery("SELECT item.id from ProductItem item where item.name like '%Cool%'").getResultList()
-        );
-        matchingIds.addAll(
-                this.entityManager.createQuery("SELECT item.id from ProductItem item where item.description like '%cool%'").getResultList()
-        );
+        searchService.search("cool").forEach((item) -> matchingIds.add(item.getId()));
+
         List<Number> counted = new ArrayList<>();
         for (Number id: matchingIds) {
             if (!counted.contains(id)) {

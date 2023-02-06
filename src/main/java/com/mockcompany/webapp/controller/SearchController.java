@@ -15,16 +15,14 @@ package com.mockcompany.webapp.controller;
  * An import statement allows the current class to use the class being imported
  */
 
-import com.mockcompany.webapp.data.ProductItemRepository;
 import com.mockcompany.webapp.model.ProductItem;
+import com.mockcompany.webapp.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * This class is the entrypoint for the /api/products/search API.  It is "annotated" with
@@ -46,12 +44,9 @@ public class SearchController {
      * @Autowired annotation.  Autowire tells the spring framework to automatically find and use an instance of
      * the declared class when creating this class.
      */
-    private final ProductItemRepository productItemRepository;
 
     @Autowired
-    public SearchController(ProductItemRepository productItemRepository) {
-        this.productItemRepository = productItemRepository;
-    }
+    SearchService searchService;
 
     /**
      * The search method, annotated with @GetMapping telling spring this method should be called
@@ -63,36 +58,7 @@ public class SearchController {
      */
     @GetMapping("/api/products/search")
     public Collection<ProductItem> search(@RequestParam("query") String query) {
-        /*
-         * TODO: !!!! Implement this method !!!!
-         *  The easiest implementation will be to use the findAll as we are below. Then filter using Java
-         *  string methods such as contains(...), toLowerCase(...), equals(...), etc.
-         *
-         *  The requirements are defined in src/test/groovy/com/mockcompany/webapp/controller/SearchControllerSpec.groovy
-         *
-         *  Read through the tests to get an idea of how search should work.  When the tests are written before the code,
-         *  it is known as Test Driven Development (TDD) and is a common best practice. The Spock framework is a great
-         *  framework for TDD because the tests are written very descriptively using sentences.
-         *
-         *    https://spockframework.org/spock/docs/2.0/spock_primer.html
-         *
-         *  For an added challenge, update the ProductItemRepository to do the filtering at the database layer :)
-         */
 
-        String queryLower = query.toLowerCase();
-        boolean isExactSearch = queryLower.startsWith("\"") && queryLower.endsWith("\"");
-
-        List<ProductItem> itemList = new ArrayList<>();
-
-        // TODO: Figure out if the item should be returned based on the query parameter!
-
-        if (isExactSearch) {
-            String exactQueryLower = queryLower.substring(1, queryLower.length()-1);
-            return this.productItemRepository.findLikeSearchExact(exactQueryLower);
-        }
-        else  {
-            return this.productItemRepository.findLikeSearch(queryLower);
-        }
-
+        return searchService.search(query);
     }
 }

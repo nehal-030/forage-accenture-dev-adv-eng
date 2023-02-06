@@ -2,6 +2,7 @@ package com.mockcompany.webapp.controller;
 
 import com.mockcompany.webapp.api.SearchReportResponse;
 import com.mockcompany.webapp.model.ProductItem;
+import com.mockcompany.webapp.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +32,9 @@ public class ReportController {
         this.entityManager = entityManager;
     }
 
+    @Autowired
+    SearchService searchService;
+
 
     @GetMapping("/api/products/report")
     public SearchReportResponse runReport() {
@@ -38,7 +42,7 @@ public class ReportController {
         SearchReportResponse response = new SearchReportResponse();
         response.setSearchTermHits(hits);
 
-        int count = this.entityManager.createQuery("SELECT item FROM ProductItem item").getResultList().size();
+        int count = searchService.search("").size();
 
         List<Number> matchingIds = new ArrayList<>();
         matchingIds.addAll(

@@ -79,26 +79,20 @@ public class SearchController {
          *  For an added challenge, update the ProductItemRepository to do the filtering at the database layer :)
          */
 
-        Iterable<ProductItem> allItems = this.productItemRepository.findAll();
+        String queryLower = query.toLowerCase();
+        boolean isExactSearch = queryLower.startsWith("\"") && queryLower.endsWith("\"");
+
         List<ProductItem> itemList = new ArrayList<>();
 
-        String queryLower = query.toLowerCase();
-        boolean exactSearch = queryLower.startsWith("\"") && queryLower.endsWith("\"");
-        // This is a loop that the code inside will execute on each of the items from the database.
-        for (ProductItem item : allItems) {
-            // TODO: Figure out if the item should be returned based on the query parameter!
-            String name = item.getName().toLowerCase();
-            String description = item.getDescription().toLowerCase();
-            if (exactSearch) {
-                String exactQueryLower = queryLower.substring(1, queryLower.length()-1);
-                if (name.equals(exactQueryLower) || description.equals(exactQueryLower)) {
-                    itemList.add(item);
-                }
-            }
-            else if (name.contains(queryLower) || description.contains(queryLower)) {
-                itemList.add(item);
-            }
+        // TODO: Figure out if the item should be returned based on the query parameter!
+
+        if (isExactSearch) {
+            String exactQueryLower = queryLower.substring(1, queryLower.length()-1);
+            return this.productItemRepository.findLikeSearchExact(exactQueryLower);
         }
-        return itemList;
+        else  {
+            return this.productItemRepository.findLikeSearch(queryLower);
+        }
+
     }
 }

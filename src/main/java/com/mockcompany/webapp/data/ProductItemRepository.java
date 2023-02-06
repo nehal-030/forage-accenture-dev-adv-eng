@@ -1,6 +1,7 @@
 package com.mockcompany.webapp.data;
 
 import com.mockcompany.webapp.model.ProductItem;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,5 +17,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ProductItemRepository extends CrudRepository<ProductItem, Long> {
+
+    @Query(value = "SELECT p FROM ProductItem p WHERE LOWER(p.name) LIKE %?1% or LOWER(p.description) LIKE %?1%")
+    Iterable<ProductItem> findLikeSearch(String query);
+
+    @Query(value = "SELECT p FROM ProductItem p WHERE LOWER(p.name)=?1 or LOWER(p.description)=?1")
+    Iterable<ProductItem> findLikeSearchExact(String query);
 
 }

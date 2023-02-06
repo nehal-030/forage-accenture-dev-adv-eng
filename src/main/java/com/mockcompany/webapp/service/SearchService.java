@@ -5,6 +5,7 @@ import com.mockcompany.webapp.model.ProductItem;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class SearchService {
@@ -22,6 +23,11 @@ public class SearchService {
      * @return The filtered products
      */
     public Collection<ProductItem> search(String query) {
+
+        if (query == null) {
+            return (List<ProductItem>) this.productItemRepository.findAll();
+        }
+
         String queryLower = query.toLowerCase();
 
         //Check if search is in "" intending to be exact match.

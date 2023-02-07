@@ -1,15 +1,12 @@
 package com.mockcompany.webapp.controller;
 
 import com.mockcompany.webapp.api.SearchReportResponse;
-import com.mockcompany.webapp.model.ProductItem;
 import com.mockcompany.webapp.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.EntityManager;
 import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * Management decided it is super important that we have lots of products that match the following terms.
@@ -22,12 +19,6 @@ public class ReportController {
     /**
      * The people that wrote this code didn't know about JPA Spring Repository interfaces!
      */
-    private final EntityManager entityManager;
-
-    @Autowired
-    public ReportController(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     @Autowired
     SearchService searchService;
@@ -39,34 +30,20 @@ public class ReportController {
         SearchReportResponse response = new SearchReportResponse();
         response.setSearchTermHits(hits);
 
-        int count = searchService.search("").size();
-
-        List<Number> matchingIds = new ArrayList<>();
+        //Get unique Ids of items matching search for cool
+        HashSet<Number> matchingIds = new HashSet<>();
         searchService.search("cool").forEach((item) -> matchingIds.add(item.getId()));
 
-        HashSet<Number> counted = new HashSet<Number>();
-        counted.addAll(matchingIds);
+        response.getSearchTermHits().put("Cool", matchingIds.size());
 
-        response.getSearchTermHits().put("Cool", counted.size());
+        response.setProductCount(searchService.search("").size());
 
+        int kidCount = searchService.search("kids").size();
+        int perfectCount = searchService.search("perfect").size();
 
-        response.setProductCount(count);
-
-        List<ProductItem> allItems = entityManager.createQuery("SELECT item FROM ProductItem item").getResultList();
-        int kidCount = 0;
-        int perfectCount = 0;
-        Pattern kidPattern = Pattern.compile("(.*)[kK][iI][dD][sS](.*)");
-        for (ProductItem item : allItems) {
-            if (kidPattern.matcher(item.getName()).matches() || kidPattern.matcher(item.getDescription()).matches()) {
-                kidCount += 1;
-            }
-            if (item.getName().toLowerCase().contains("perfect") || item.getDescription().toLowerCase().contains("perfect")) {
-                perfectCount += 1;
-            }
-        }
         response.getSearchTermHits().put("Kids", kidCount);
 
-        response.getSearchTermHits().put("Amazing", entityManager.createQuery("SELECT item FROM ProductItem item where lower(concat(item.name, ' - ', item.description)) like '%amazing%'").getResultList().size());
+        response.getSearchTermHits().put("Amazing", searchService.search("amazing").size());
 
         hits.put("Perfect", perfectCount);
 

@@ -1,4 +1,5 @@
 on: push
+name: Jenkins single-shot master
 jobs:
   jenkinsfile-runner-prepackaged:
     runs-on: ubuntu-latest

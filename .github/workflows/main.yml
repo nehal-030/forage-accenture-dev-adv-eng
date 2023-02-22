@@ -6,6 +6,6 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Jenkinsfile Runner Prepackaged
-      uses: jenkinsci/jenkinsfile-runner-github-actions@v0.11
+      uses: jenkinsci/jenkinsfile-runner-github-actions@v0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

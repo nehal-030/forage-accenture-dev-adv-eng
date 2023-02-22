@@ -4,6 +4,12 @@ jobs:
   jenkinsfile-runner-prepackaged:
     runs-on: ubuntu-latest
     steps:
+    - name: Setup Node.js and Yarn
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16.x'
+    - name: Install dependences with Yarn
+      run: yarn install
     - uses: actions/checkout@master
     - name: Jenkinsfile Runner Prepackaged
       uses: jenkinsci/jenkinsfile-runner-github-actions@v0.2

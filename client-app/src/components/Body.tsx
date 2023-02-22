@@ -126,6 +126,7 @@ class Body extends React.Component<BodyProps, BodyState> {
             page={page}
             onChangePage={this.handleChangePage}
             onChangeRowsPerPage={this.handleChangeRowsPerPage}
+            onPageChange={this.handleChangePage}
             />
         </Paper>
       </div>

@@ -15,6 +15,7 @@ jobs:
 
     - name: Install dependences with Yarn
       run: yarn install
+      working-directory: ./client-app
 
     - uses: actions/checkout@master
     - name: Jenkinsfile Runner Prepackaged

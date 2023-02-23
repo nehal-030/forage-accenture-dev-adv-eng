@@ -5,14 +5,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/setup-java@v2
-      with:
-        java-version: '8'
     - name: Setup Node.js and npm
       uses: actions/setup-node@v2
       with:
         node-version: '14.x'
-    - uses: gradle/setup-gradle@v3
+    - uses: gradle/gradle-build-action@v2
       with:
         gradle-version: 6.9.1
     - name: Checkout Code

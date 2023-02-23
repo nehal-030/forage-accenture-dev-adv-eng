@@ -23,8 +23,8 @@ public class SearchService {
      * @return The filtered products
      */
     public Collection<ProductItem> search(String query) {
-        return Collections.emptyList();
-        /* if (query == null) {
+
+        if (query == null) {
             return (List<ProductItem>) this.productItemRepository.findAll();
         }
 
@@ -38,6 +38,6 @@ public class SearchService {
             return this.productItemRepository.findLikeSearchExact(exactQueryLower);
         } else {
             return this.productItemRepository.findLikeSearch(queryLower);
-        }*/
+        }
     }
 }

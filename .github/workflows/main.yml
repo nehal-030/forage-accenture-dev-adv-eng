@@ -18,6 +18,8 @@ jobs:
     - name: Install dependences with Yarn
       run: yarn install
       working-directory: ./client-app
+    - name: Add npm to PATH
+      run: export PATH="$(yarn global bin):$PATH"
 
     - uses: actions/checkout@master
     - name: Jenkinsfile Runner Prepackaged

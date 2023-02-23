@@ -5,6 +5,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+    - uses: gradle/setup-gradle@v1
+        with:
+          gradle-version: 6.9.1
     - name: Checkout Code
       uses: actions/checkout@v2
 

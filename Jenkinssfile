@@ -4,13 +4,35 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh './gradlew assemble'
+                script {
+                    // Run the Gradle build task to compile the project
+                    sh './gradlew assemble'
+                }
             }
         }
+        
         stage('Test') {
             steps {
-                sh './gradlew test'
+                script {
+                    // Run the Gradle test task to execute the unit tests
+                    sh './gradlew test'
+                }
             }
+        }
+    }
+
+    post {
+        always {
+            // This section is always executed after the pipeline is finished
+            // You can use it to clean up or send notifications
+        }
+        
+        success {
+            echo 'Build and tests passed successfully!'
+        }
+
+        failure {
+            echo 'Build or tests failed!'
         }
     }
 }
